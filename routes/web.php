@@ -11,14 +11,18 @@
 |
 */
 
-Route::get('/', 'pagesController@home');
-
-Route::get('/contacts', function () {
-    return view('contacts');
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::resource('projects', 'projectsController');
 
-Route::get('/projects', 'projectsController@index');
+// ^ === ...
+
+// Route::get('/projects', 'projectsController@index');
+// Route::get('/projects/create', 'projectsController@create');
+// Route::get('/projects/{project}', 'projectsController@show');
+// Route::post('/projects', 'projectsController@store');
+// Route::get('/projects/{project}/edit', 'projectsController@edit');
+// Route::patch('/projects/{project}', 'projectsController@update');
+// Route::delete('/projects/{project}', 'projectsController@destroy');
