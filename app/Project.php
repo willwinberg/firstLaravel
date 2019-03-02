@@ -9,4 +9,9 @@ class Project extends Model
     protected $fillable = [ //protection, only these values can be sent in form
         'title', 'description'
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }
