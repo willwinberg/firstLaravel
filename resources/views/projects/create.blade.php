@@ -8,18 +8,19 @@
         <input class="
                textarea
                {{ $errors->has('title') ? 'is-danger' : ''}}
-            " value="{{ old('title') }}" type="text" name="title" placeholder="Project Title">
+            " value="{{ old('title') }}" type="text" name="title" placeholder="Project Title" required>
         <div>
             <textarea class="
                   textarea
                   {{ $errors->has('title') ? 'is-danger' : ''}}
                " type="text" name="description" placeholder="Project
-               Description">{{ old('description') }}</textarea>
+               Description" required>{{ old('description') }}</textarea>
         </div>
         <div>
             <button type="submit">Press</button>
         </div>
-        @if ($errors->any())
+        @include ('errors')
+        <!-- @if ($errors->any())
         <div class="notification is-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -27,6 +28,6 @@
                 @endforeach
             </ul>
         </div>
-        @endif
+        @endif -->
 </form>
 @endsection 
