@@ -16,19 +16,28 @@
 // app()->bind() vs app()->singleton()
 // bind classes to container accordingly
 
-app()->singleton('App\Services\Twitter', function () {
-    // dd('twitter route called');
-    return new \App\Services\Twitter('dvsdvfdfsvd');
-});
+// app()->singleton('App\Services\Twitter', function () {
+//     // dd('twitter route called');
+//     return new \App\Services\Twitter('dvsdvfdfsvd');
+// });
 
 // app()->singleton('App\Example', function () {
 //     dd('called');
 //     return new \App\Example;
 // });
 
+use App\Services\Twitter;
 
-Route::get('/', function () {
-    dd(app('App\Example'));
+
+// Route::get('/', function (UserRepository $users) {
+//     // dd(app('App\Example'));
+//     dd($users);
+//     return view('welcome');
+// });
+
+Route::get('/', function (Twitter $twitter) {
+    // dd(app('App\Example'));
+    dd($twitter);
     return view('welcome');
 });
 
