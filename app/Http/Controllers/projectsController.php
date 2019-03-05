@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Project;
-use App\Services\Twitter;
-use App\Mail\ProjectCreated;
+// use App\Services\Twitter;
+use App\Events\ProjectCreated;
+// use App\Mail\ProjectCreated;
 
 class projectsController extends Controller
 {
@@ -75,9 +76,10 @@ class projectsController extends Controller
 
         $project = Project::create($attributes);
 
-        \Mail::to('williamwinberg89@gmail.com')->send(
-            new ProjectCreated($project)
-        );
+        // \Mail::to($project->owner->email)->send(
+        //     new ProjectCreated($project)
+        // );
+        // event(new ProjectCreated($project));
 
         return redirect('/projects');
     }
