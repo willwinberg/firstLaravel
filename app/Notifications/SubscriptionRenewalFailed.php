@@ -29,7 +29,7 @@ class SubscriptionRenewalFailed extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database']; // and many many more...
     }
 
     /**
@@ -41,9 +41,10 @@ class SubscriptionRenewalFailed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Your subcription renewal failed.')
+            ->line('Your subcription renewal failed.')
+            ->action('Add new card', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -53,9 +54,8 @@ class SubscriptionRenewalFailed extends Notification
      * @return array
      */
     public function toArray($notifiable)
+    // toDatabase()
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

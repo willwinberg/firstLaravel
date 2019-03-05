@@ -27,6 +27,7 @@
 // });
 
 use App\Services\Twitter;
+use App\Notifications\SubscriptionRenewalFailed;
 
 
 // Route::get('/', function (UserRepository $users) {
@@ -38,7 +39,12 @@ use App\Services\Twitter;
 Route::get('/', function (Twitter $twitter) {
     // dd(app('App\Example'));
     // dd($twitter);
-    return view('welcome');
+
+    $user = App\User::first();
+    $user->notify(new SubscriptionRenewalFailed);
+    return 'Done';
+
+    // return view('welcome');
 });
 
 Route::resource('projects', 'projectsController');
