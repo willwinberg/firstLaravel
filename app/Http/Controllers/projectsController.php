@@ -7,9 +7,19 @@ use App\Services\Twitter;
 
 class projectsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $projects = Project::all();
+        // auth->id(); // 4
+        // auth->user(); // User
+        // auth->check(); // bool
+        // if (auth()->guest())
+
+        $projects = Project::where('owner_id', auth()->id())->get();
 
         // return $projects;
 
@@ -18,7 +28,15 @@ class projectsController extends Controller
 
     public function show(Project $project, Twitter $twitter)
     {
-        dd($twitter);
+        // abort_if();
+        // abort_unless();
+        // if (\Gate::denies('update', $project)) {
+        //     abort(403);
+        // }
+        // abort_if(\Gate::denies('update', $project), 403);
+        $this->authorize('update', $project); // Goto unless need otherwise
+        // auth()->user()->can('update', $project); // or cannot()
+        // dd($twitter);
 
         return view('projects.show', compact('project'));
     }
@@ -30,10 +48,14 @@ class projectsController extends Controller
 
     public function store()
     {
+        $this->authorize('update', $project);
+
         $attributes = request()->validate([
             'title' => ['required', 'min:3', 'max:255'],
             'description' => 'required',
         ]);
+
+        $attributes['owner_id'] = auth()->id();
 
         // Dangerous
         // Project::create(request()->all());
@@ -58,6 +80,10 @@ class projectsController extends Controller
 
     public function update(Project $project)
     {
+        $this->authorize('update', $project);
+
+        // VALIDATE
+
         // $project->title = request('title');
         // $project->description = request('description');
 
@@ -70,6 +96,8 @@ class projectsController extends Controller
 
     public function destroy(Project $project)
     {
+        $this->authorize('update', $project);
+
         $project->delete();
         return redirect('/projects');
     }

@@ -37,11 +37,12 @@ use App\Services\Twitter;
 
 Route::get('/', function (Twitter $twitter) {
     // dd(app('App\Example'));
-    dd($twitter);
+    // dd($twitter);
     return view('welcome');
 });
 
 Route::resource('projects', 'projectsController');
+// Route::resource('projects', 'projectsController')->middleware('can:updare,project');
 
 // ^ === ...
 
@@ -58,3 +59,7 @@ Route::post('/projects/{project}/tasks', 'ProjectTaskController@store');
 
 Route::post('/completed-tasks/{task}', 'CompletedTaskController@store');
 Route::delete('/completed-tasks/{task}', 'CompletedTaskController@destroy');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
