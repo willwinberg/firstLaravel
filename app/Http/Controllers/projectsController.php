@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use App\Services\Twitter;
+use App\Mail\ProjectCreated;
 
 class projectsController extends Controller
 {
@@ -19,14 +20,21 @@ class projectsController extends Controller
         // auth->check(); // bool
         // if (auth()->guest())
 
-        $projects = Project::where('owner_id', auth()->id())->get();
+        $projects = auth()->user()->projects;
+        // $projects = Project::where('owner_id', auth()->id())->get();
 
-        // return $projects;
+        // cache()->rememberForever('stats', function () {
+        //     return ['lessons' => 1300, 'hours' => 112];
+        // });
+
+        // $data = cache()->get('stats');
+
+        // dump($data);
 
         return view('projects.index', ['projects' => $projects]); // or compact('projects')
     }
 
-    public function show(Project $project, Twitter $twitter)
+    public function show(Project $project)
     {
         // abort_if();
         // abort_unless();
@@ -34,7 +42,7 @@ class projectsController extends Controller
         //     abort(403);
         // }
         // abort_if(\Gate::denies('update', $project), 403);
-        $this->authorize('update', $project); // Goto unless need otherwise
+        // $this->authorize('update', $project); // Goto unless need otherwise
         // auth()->user()->can('update', $project); // or cannot()
         // dd($twitter);
 
@@ -48,12 +56,9 @@ class projectsController extends Controller
 
     public function store()
     {
-        $this->authorize('update', $project);
+        // $this->authorize('update', $project);
 
-        $attributes = request()->validate([
-            'title' => ['required', 'min:3', 'max:255'],
-            'description' => 'required',
-        ]);
+        $attributes = $this->validateProject();
 
         $attributes['owner_id'] = auth()->id();
 
@@ -68,7 +73,11 @@ class projectsController extends Controller
 
         // ===
 
-        Project::create($attributes);
+        $project = Project::create($attributes);
+
+        \Mail::to('williamwinberg89@gmail.com')->send(
+            new ProjectCreated($project)
+        );
 
         return redirect('/projects');
     }
@@ -80,7 +89,7 @@ class projectsController extends Controller
 
     public function update(Project $project)
     {
-        $this->authorize('update', $project);
+        // $this->authorize('update', $project);
 
         // VALIDATE
 
@@ -89,7 +98,7 @@ class projectsController extends Controller
 
         // $project->save();
 
-        Project::update(['title', 'description']);
+        $project->update($this->validateProject());
 
         return redirect('/projects');
     }
@@ -97,6 +106,21 @@ class projectsController extends Controller
     public function destroy(Project $project)
     {
         $this->authorize('update', $project);
+
+        $project->delete();
+        return redirect('/projects');
+    }
+
+    protected function validateProject()
+    {
+        return request()->validate([
+            'title' => [
+                'required', 'min:3',
+                'max:255'
+            ],
+            'description' =>
+            'required',
+        ]);
 
         $project->delete();
         return redirect('/projects');
