@@ -39,4 +39,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'owner_id');
     }
+
+    public function notVerified()
+    {
+        return !$this->email_is_verified;
+        // || return (bool) ...
+    }
 }

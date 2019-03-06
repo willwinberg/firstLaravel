@@ -28,6 +28,7 @@
 
 use App\Services\Twitter;
 use App\Notifications\SubscriptionRenewalFailed;
+use Illuminate\Http\Request;
 
 
 // Route::get('/', function (UserRepository $users) {
@@ -36,17 +37,42 @@ use App\Notifications\SubscriptionRenewalFailed;
 //     return view('welcome');
 // });
 
-Route::get('/', function (Twitter $twitter) {
+Route::get('/', function () {
     // dd(app('App\Example'));
     // dd($twitter);
 
-    $user = App\User::first();
-    $user->notify(new SubscriptionRenewalFailed);
+    // session(['name' => 'Will']); // post to session
+    // return session('name'); // get fromm session
+    // return session('name', 'Will'); //  get fromm session with default
+    // session()->forget(); // delete from session
+
+    // $user = App\User::first();
+    // $user->notify(new SubscriptionRenewalFailed);
 
     return view('welcome');
 });
 
-Route::resource('projects', 'projectsController');
+// Route::get('/', function (Request $request) {
+//     // $request->session()->get('name');
+//     // $request->session()->put('foo', 'bar');
+//     // return $request->session()->get('foo');
+//     // return $request->session()->get('noob', 'tube');
+//     $request->flash(); // save it for one more page load, ie a 'updated' message
+// });
+
+Route::get('/projects/create', function () {
+    return view('projects.create');
+});
+
+Route::post('/projects', function () {
+    // validate it
+    // save it
+    session()->flash('message', 'Your message has been created!'); // display once, page load; could also make helper flash() function
+    return redirect('/');
+    // OR redirect('/)->with('message', 'update success');
+});
+
+// Route::resource('projects', 'projectsController');
 // Route::resource('projects', 'projectsController')->middleware('can:updare,project');
 
 // ^ === ...
