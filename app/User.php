@@ -45,4 +45,9 @@ class User extends Authenticatable
         return !$this->email_is_verified;
         // || return (bool) ...
     }
+
+    public function team()
+    {
+        return $this->hasOne('App\Team');
+    }
 }

@@ -64,6 +64,15 @@ Route::get('/projects/create', function () {
     return view('projects.create');
 });
 
+Route::middleware('auth')->post('/teams', function () {
+    $attributes = request()->validate(['name' => 'required']);
+    // $attributes['user_id'] = auth()->id();
+
+
+    auth()->user()->team()->create($attributes);
+    return redirect('/');
+});
+
 Route::post('/projects', function () {
     // validate it
     // save it
