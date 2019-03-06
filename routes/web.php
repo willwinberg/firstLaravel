@@ -42,9 +42,8 @@ Route::get('/', function (Twitter $twitter) {
 
     $user = App\User::first();
     $user->notify(new SubscriptionRenewalFailed);
-    return 'Done';
 
-    // return view('welcome');
+    return view('welcome');
 });
 
 Route::resource('projects', 'projectsController');
